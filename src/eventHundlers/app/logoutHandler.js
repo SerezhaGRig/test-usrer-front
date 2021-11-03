@@ -1,5 +1,6 @@
 import axios from "axios";
-import {URL} from "../config";
+import {URL} from "../../config";
+import updateState from '../helpers/updateState'
 
 export default function logoutControl({data,setData}) {
     console.log("response2")
@@ -8,10 +9,6 @@ export default function logoutControl({data,setData}) {
         url: URL+'logout',
         withCredentials: true
     }).then(function (response) {
-        console.log(data.history)
-        data.isLogged=false
-        data.data = 'Loading'
-        let newData = Object.assign({},data)
-        setData(newData)
+        updateState({oldval:data,from:{isLogged:false,data:'Loading'},setState:setData})
     })
 }

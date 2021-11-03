@@ -1,5 +1,6 @@
-import {URL} from '../config'
+import {URL} from '../../config'
 import axios from "axios";
+import updateState from '../helpers/updateState'
 export function submitHandler({event,formVal,path,history,setVal}){
     // let bodyFormData = new FormData();
     // for(let key in formVal){
@@ -28,9 +29,7 @@ export function submitHandler({event,formVal,path,history,setVal}){
 
         })
         .catch(function (error) {
-            formVal.unfortunate='Unfortunate'
-            let newVal = Object.assign({},formVal)
-            setVal(newVal)
+            updateState({oldval:formVal,from:{unfortunate:'Unfortunate'},setState:setVal})
         });
     event.preventDefault();
 

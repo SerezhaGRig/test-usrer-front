@@ -9,8 +9,8 @@ import {
 import Registration from './components/Registration'
 import Login from './components/Login'
 import Home from './components/Home'
-import registerControl from "./controllers/registerControl";
-import logoutControl from "./controllers/logoutControl";
+import loginState from "./eventHundlers/app/loginState";
+import logoutHandler from "./eventHundlers/app/logoutHandler";
 import {useHistory} from "react-router";
 
 export default function App() {
@@ -18,7 +18,7 @@ export default function App() {
     let [datajs,setData]=useState({isLogged:false,data:"Loading"})
 
     useEffect(() => {
-        registerControl({data:datajs,setData})
+        loginState({data:datajs,setData})
     },[]);
 
     return (
@@ -52,7 +52,7 @@ export default function App() {
                                 </li>
                                 }
                                 {datajs.isLogged ? <li className="nav-item mx-md-3">
-                                    <Link onClick={()=>{logoutControl({data:datajs,setData})}}  className=" nav-link">Logout</Link>
+                                    <Link onClick={()=>{logoutHandler({data:datajs,setData})}}  className=" nav-link">Logout</Link>
                                 </li>:null
                                 }
                             </ul>
