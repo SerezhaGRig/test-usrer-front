@@ -1,22 +1,11 @@
 import React, {useState} from "react";
 import axios from "axios";
 import {URL} from "../config";
+import {Redirect, useHistory} from "react-router";
 
-export default function Home() {
-    let [data,setData]=useState("Loading")
-    console.log("response2")
-    axios({
-        method: "get",
-        url: URL,
-        withCredentials: true
-    }).then(function (response) {
-        console.log("response")
-        console.log(response)
-        setData('About')
-    })
-    .catch(function (error) {
-        console.log(error.response.data);
-        setData('error')
-    });
-    return (<h2>{data}</h2>)
+export default function Home(props) {
+    if (!props.args.isLogged){
+        return <Redirect to={'\login'} />
+    }
+    return (<h2 className='mt-lg-5'>About</h2>)
 }

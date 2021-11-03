@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -9,35 +9,68 @@ import {
 import Registration from './components/Registration'
 import Login from './components/Login'
 import Home from './components/Home'
+import registerControl from "./controllers/registerControl";
+import logoutControl from "./controllers/logoutControl";
+import {useHistory} from "react-router";
 
 export default function App() {
+    let history  = useHistory()
+    let [datajs,setData]=useState({isLogged:false,data:"Loading"})
+
+    useEffect(() => {
+        registerControl({data:datajs,setData})
+    },[]);
+
     return (
         <Router>
             <div>
-                <div className='container'>
-                    <div className='row'>
-                        <div className='col'>
-                            <Link to="/">Home</Link>
-                        </div >
-                        <div className='col'>
-                            <Link to="/registration">Registration</Link>
-                        </div>
-                        <div className='col'>
-                            <Link to="/login">Login</Link>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                    <div className="container-fluid">
+                        {datajs.isLogged ?
+                            <Link className="navbar-brand" href="/">Navbar</Link>:null
+                        }
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"/>
+                        </button>
+                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                {datajs.isLogged ? <li className="nav-item mx-md-3">
+                                    <Link className="nav-link" to="/">Home</Link>
+                                </li>:null
+
+                                }
+                                {datajs.isLogged ? null:
+                                    <li className="nav-item mx-md-3">
+                                        <Link className="nav-link" to="/registration">Registration</Link>
+                                    </li>
+                                }
+                                {datajs.isLogged ?null:
+                                    <li className="nav-item mx-md-3">
+                                    <Link className="nav-link" to="/login">Login</Link>
+                                </li>
+                                }
+                                {datajs.isLogged ? <li className="nav-item mx-md-3">
+                                    <Link onClick={()=>{logoutControl({data:datajs,setData})}}  className=" nav-link">Logout</Link>
+                                </li>:null
+                                }
+                            </ul>
                         </div>
                     </div>
-                </div>
+                </nav>
 
                 <Switch>
                     <Route path="/registration">
-                        <Registration />
+                        <Registration args = {datajs}/>
                     </Route>
-                    <Login path="/login">
-                        <Login />
-                    </Login>
+                    <Route path="/login">
+                        <Login args = {datajs}/>
+                    </Route>
                     <Route path="/">
-                        <Home />
+                        <Home args = {datajs}/>
                     </Route>
+
                 </Switch>
             </div>
         </Router>

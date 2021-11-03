@@ -1,6 +1,6 @@
 import {URL} from '../config'
 import axios from "axios";
-export function submitHandler({event,formVal,history,path}){
+export function submitHandler({event,formVal,path,history,setVal}){
     // let bodyFormData = new FormData();
     // for(let key in formVal){
     //     bodyFormData.append(key.toString(),formVal[key])
@@ -17,15 +17,20 @@ export function submitHandler({event,formVal,history,path}){
 
     })
         .then(function (response) {
-            console.log(response);
-            console.log(response.headers["set-cookie"])
-            //handle success
-
+            if(response.data === 'Congratulation')
+            {
+                if(history)
+                    history.push('\login')
+            }
+            else {
+                window.location.reload();
+            }
 
         })
         .catch(function (error) {
-            //handle error
-            console.log(error.response.data);
+            formVal.unfortunate='Unfortunate'
+            let newVal = Object.assign({},formVal)
+            setVal(newVal)
         });
     event.preventDefault();
 
