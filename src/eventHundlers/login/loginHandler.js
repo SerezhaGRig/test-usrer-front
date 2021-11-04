@@ -4,7 +4,7 @@ export function loginHandler({...val}) {
             if(response.data === 'Congratulation')
             {
                 if(history)
-                    history.push('\login')
+                    val.history.push('\login')
             }
             else {
                 window.location.reload();

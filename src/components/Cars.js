@@ -14,7 +14,7 @@ export default function Cars(props) {
         return <Redirect to={'\login'}/>
     }
     if(cars.length === 0)
-        return (<h2 className='mt-lg-5'>About</h2>)
+        return (<h2 className='mt-lg-5'>About cars</h2>)
     return (
         <CarList data={cars}/>
     )
@@ -25,6 +25,12 @@ function CarList(props){
         <tr><th>{car.model_name}</th><th>{car.reg_num}</th></tr>
     );
     return (
-        <table className="table">{listItems}</table>
+        <table className="table"><thead>
+        <tr>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+        </thead><tbody>{listItems}</tbody></table>
     );
 }

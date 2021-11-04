@@ -1,10 +1,11 @@
 import {changeHandler,submitHandler} from '../helpers/formHandlers'
 export function regHandler({...val}) {
     submitHandler({...val,path:'register',callback:function (response) {
+        console.log(response.data)
             if(response.data === 'Congratulation')
             {
                 if(history)
-                    history.push('\login')
+                    val.history.push('\login')
             }
             else {
                 window.location.reload();
