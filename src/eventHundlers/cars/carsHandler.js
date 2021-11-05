@@ -2,7 +2,7 @@ import axios from "axios";
 import {URL} from "../../config";
 import updateState from '../helpers/updateState'
 
-export default function loadCars({cars,setCars}) {
+export  function loadCars({cars,setCars}) {
     console.log("response2")
     axios({
         method: "get",
@@ -14,4 +14,8 @@ export default function loadCars({cars,setCars}) {
     }).catch(function (error) {
         
     });
+}
+
+function handleCarEdit({event,carId,history}){
+    history.push(`edit/{carId}`)
 }

@@ -9,11 +9,12 @@ import {
 import Registration from './components/Registration'
 import Login from './components/Login'
 import Home from './components/Home'
-import Add from './components/Add'
+import AddCar from './components/AddCar'
 import Cars from './components/Cars'
 import loginState from "./eventHundlers/app/loginState";
 import logoutHandler from "./eventHundlers/app/logoutHandler";
-import {useHistory} from "react-router";
+import {useHistory, useRouteMatch} from "react-router";
+import EditCar from './components/EditCar'
 
 export default function App() {
     let history  = useHistory()
@@ -22,7 +23,6 @@ export default function App() {
     useEffect(() => {
         loginState({data:datajs,setData})
     },[]);
-
     return (
         <Router>
             <div>
@@ -80,14 +80,18 @@ export default function App() {
                         <Login args = {datajs}/>
                     </Route>
                     <Route path="/add">
-                        <Add args = {datajs}/>
+                        <AddCar args = {datajs}/>
                     </Route>
                     <Route path="/cars">
                         <Cars args = {datajs}/>
                     </Route>
+                    <Route path="edit/:carId">
+                        <EditCar args = {datajs}/>
+                    </Route>
                     <Route path="/">
                         <Home args = {datajs}/>
                     </Route>
+                    
 
                 </Switch>
             </div>

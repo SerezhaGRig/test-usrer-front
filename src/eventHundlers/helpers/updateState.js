@@ -1,4 +1,5 @@
 export default function updateState({oldval,from,setState}){
+    console.log('from',from)
             for(let key in from)
             {
                 if(oldval[key]!==undefined){
@@ -6,6 +7,7 @@ export default function updateState({oldval,from,setState}){
                 }
             }
             let newVal = Object.assign({},oldval)
+            console.log('final State',newVal)
             setState(newVal)
 
 }

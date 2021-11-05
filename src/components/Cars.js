@@ -2,14 +2,16 @@ import React, {useState, useEffect} from "react";
 import axios from "axios";
 import {URL} from "../config";
 import {Redirect, useHistory} from "react-router";
-import loadCars from '../eventHundlers/cars/carsHandler'
+import {loadCars,handleCarEdit} from '../eventHundlers/cars/carsHandler'
 
 export default function Cars(props) {
 
     let [cars,setCars]=useState([])
     useEffect(() => {
             loadCars({cars,setCars})
+        
         },[]);
+    let history = useHistory()
     if (!props.args.isLogged){
         return <Redirect to={'\login'}/>
     }
@@ -22,7 +24,15 @@ export default function Cars(props) {
 
 function CarList(props){
     const listItems = props.data.map((car) =>
-        <tr><th>{car.model_name}</th><th>{car.reg_num}</th></tr>
+        <tr key={car.car_id}>
+            <th>{car.model_name}</th>
+            <th>{car.reg_num}</th>
+            <th>
+                <button type="button" className="btn btn-primary" onClick={(event) =>{
+                            handleCarEdit({event,carId:car.car_id,history})
+                        }
+                }>Edit</button></th>
+        </tr>
     );
     return (
         <table className="table"><thead>
@@ -34,3 +44,4 @@ function CarList(props){
         </thead><tbody>{listItems}</tbody></table>
     );
 }
+
