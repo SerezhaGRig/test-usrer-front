@@ -85,7 +85,7 @@ export default function App() {
                     <Route path="/cars">
                         <Cars args = {datajs}/>
                     </Route>
-                    <Route path="edit/:carId">
+                    <Route path="/edit/:carId">
                         <EditCar args = {datajs}/>
                     </Route>
                     <Route path="/">

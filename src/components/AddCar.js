@@ -6,18 +6,16 @@ import CheckList from '../components/CheckList'
 import {yearList} from '../eventHundlers/helpers/utils'
 import {changeHandler} from '../eventHundlers/helpers/formHandlers'
 import {addHandler,updateBrands,brandSelectHandler,updateModelsByBrand,selectHandler} from '../eventHundlers/add_car/addHandlers'
+import updateState from '../eventHundlers/helpers/updateState'
 
 export default function AddCar(props) {
-    if (!props.args.isLogged){
-        return <Redirect to={'\login'}/>
-    }
-    const [formVal,setVal] = useState({brands:[],models:[],brand:'',model:'',year:'',regnum:'',unfortunate:''})
-    const  history = useHistory()
-    useEffect(()=>{
-        updateBrands({formVal,setVal})
-    },[])
-
     let years = yearList()
+    const [formVal,setVal] = useState({brands:[],models:[],brand:'',model:'',year:'',years,regnum:'',unfortunate:''})
+    const  history = useHistory()
+    useEffect(async ()=>{
+        await updateBrands({formVal,setVal})
+    },[])
+    
     return (<div className='container '>
         <div className='row-cols-4'>
             <form onSubmit={(event)=>{addHandler({event,formVal,history,setVal})}} >
@@ -25,7 +23,9 @@ export default function AddCar(props) {
                     <select name={"brand"} className="form-select" id="inputGroupSelect01" onChange={(event) => {
                         console.log('selected')
                         brandSelectHandler({event,formVal,setVal})
-                        updateModelsByBrand({formVal,setVal})
+                        updateModelsByBrand({formVal,setVal}).then(()=>{
+                            updateState({oldval:formVal,from:{model:formVal.models[0]},setState:setVal})
+                        })
                     }}>
                         <option hidden disabled selected value> Brand </option>
                         <CheckList array = {formVal.brands}/>
@@ -46,7 +46,7 @@ export default function AddCar(props) {
                         selectHandler({event,formVal,setVal})
                     }}>
                         <option disabled selected value> Year </option>
-                        <CheckList array = {years} />
+                        <CheckList array = {formVal.years} />
                     </select>
                 </div>
                 <div className="mb-3">

@@ -6,16 +6,16 @@ export  function loadCars({cars,setCars}) {
     console.log("response2")
     axios({
         method: "get",
-        url: URL,
+        url: URL+"cars",
         withCredentials: true
     }).then(function (response) {
-        var newCars = JSON.parse(response.data);
+        var newCars = response.data;
         setCars(newCars)
     }).catch(function (error) {
         
     });
 }
 
-function handleCarEdit({event,carId,history}){
-    history.push(`edit/{carId}`)
+export function handleCarEdit({event,carId,history}){
+    history.push(`edit/`+carId)
 }

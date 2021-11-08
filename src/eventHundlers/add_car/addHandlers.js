@@ -23,50 +23,54 @@ export function selectHandler({event,formVal,setVal}){
 
 }
 
-export function updateBrands({formVal,setVal}){
-    axios({
-        method: "get",
-        url: URL+'brands',
-        withCredentials: true,
-        headers: {
+export async function updateBrands({formVal,setVal}){
+    
+    try {
+        let response = await axios({
+            method: "get",
+            url: URL+'brands',
+            withCredentials: true,
+            headers: {
 
-            "Content-Type": "application/json",},
+                "Content-Type": "application/json",},
 
-    })
-        .then(function (response){
-                let brands = response.data;
-                updateState({oldval:formVal,from:{brands},setState:setVal})
+        })
+            
+        console.log("in brands")
+        let brands = response.data;
+        updateState({oldval:formVal,from:{brands},setState:setVal})
 
-            }
-        )
-        .catch(function (error) {
-            updateState({oldval:formVal,from:{unfortunate:'Unfortunate'},setState:setVal})
-        });
+    }
+    catch (e) {
+        updateState({oldval:formVal,from:{unfortunate:'Unfortunate'},setState:setVal})
+    }
+    
 
 }
 
-export function updateModelsByBrand({formVal,setVal}){
+export async function updateModelsByBrand({formVal,setVal}){
+    console.log("in updateModelsByBrand()")
     let path = 'models/'+formVal.brand.toString()
     console.log(path)
-    axios({
-        method: "get",
-        url: URL+path,
-        withCredentials: true,
-        headers: {
+    try {
+        let response  = await axios({
+            method: "get",
+            url: URL+path,
+            withCredentials: true,
+            headers: {
 
-            "Content-Type": "application/json",},
+                "Content-Type": "application/json",},
 
-    })
-        .then(function (response){
-                var models = response.data;
-                updateState({oldval:formVal,from:{models},setState:setVal})
-
-            }
-        )
-        .catch(function (error) {
-            updateState({oldval:formVal,from:{unfortunate:'Unfortunate'},setState:setVal})
-        });
-
+        })
+        var models = response.data;
+        updateState({oldval:formVal,from:{models},setState:setVal})
+    }
+    catch (e) {
+        updateState({oldval:formVal,from:{unfortunate:'Unfortunate'},setState:setVal})
+    }
+    
+    
+       
 }
 
 export function addHandler({event,formVal,history,setVal}){
@@ -83,8 +87,8 @@ export function addHandler({event,formVal,history,setVal}){
 
     })
         .then(function (response){
-
-
+            updateState({oldval:formVal,from:{unfortunate:'Added'},setState:setVal})
+            history.push("/cars")
             }
         )
         .catch(function (error) {

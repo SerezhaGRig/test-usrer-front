@@ -1,4 +1,4 @@
-import  {React,useState,useEffect} from "react";
+import  React,{useState,useEffect} from "react";
 import axios from "axios";
 import {URL} from "../config";
 import {Redirect, useHistory,useParams} from "react-router";
@@ -6,45 +6,55 @@ import {yearList} from '../eventHundlers/helpers/utils'
 import CheckList from '../components/CheckList'
 import {changeHandler} from '../eventHundlers/helpers/formHandlers'
 import {addHandler,updateBrands,brandSelectHandler,updateModelsByBrand,selectHandler} from '../eventHundlers/add_car/addHandlers'
-import {updateEditForm,editHandler} from '../eventHundlers/edit_car/editHandlers' 
+import {updateEditForm,editHandler} from '../eventHundlers/edit_car/editHandlers'
+import updateState from '../eventHundlers/helpers/updateState'
 
 export default function EditCar(props) {
-    if (!props.args.isLogged) {
-        return <Redirect to={'\login'}/>
-    }
     let {carId} = useParams();
+    let history =  useHistory()
     let years = yearList()
     const [formVal, setVal] = useState({
+        carId,
         brands: [],
         models: [],
         brand: '',
         model: '',
         year: '',
-        regnum: props.data.regnum,
+        years,
+        regnum: '',
         unfortunate: ''
     })
-    useEffect(() => {
-        updateBrands({formVal, setVal})
-        updateEditForm({formVal, setVal,carId})
-        updateModelsByBrand({formVal, setVal})
+    useEffect(async () => {
+        console.log("edit car use eff "+carId)
+        updateBrands({formVal, setVal}).then(
+            (resp)=>{
+            updateEditForm({formVal, setVal,carId}).then(
+                (res)=>{
+                    updateModelsByBrand({formVal, setVal})
+                }
+            )
+        })
+
     }, [])
-    const history = useHistory()
     return (<div className='container '>
         <div className='row-cols-4'>
             <form onSubmit={(event) => {
-                addHandler({event, formVal, history, setVal})
+                editHandler({event,history, formVal, setVal,carId})
             }}>
                 <div className="mb-3 mt-lg-5">
-                    <select name={"Brands..."} className="form-select" id="inputGroupSelect01" onChange={(event) => {
-                        brandSelectHandler({event, formVal, setVal})
-                        updateModelsByBrand(formVal.brand)
+                    <select name={"brand"} className="form-select" id="inputGroupSelect01" onChange={(event) => {
+                        selectHandler({event, formVal, setVal})
+                        updateModelsByBrand({formVal, setVal}).then(()=>{
+                            updateState({oldval:formVal,from:{model:formVal.models[0]},setState:setVal})
+                        })
+
                     }}>
                         <CheckList array={formVal.brands} selected={formVal.brand}/>
                     </select>
                 </div>
 
                 {formVal.brand.length ? <div className="mb-3">
-                    <select name={"Models..."} className="form-select" id="inputGroupSelect02" onChange={(event) => {
+                    <select name={"model"} className="form-select" id="inputGroupSelect02" onChange={(event) => {
                         selectHandler({event, formVal, setVal})
                     }}>
                         <CheckList array={formVal.models} selected={formVal.model}/>
@@ -54,10 +64,10 @@ export default function EditCar(props) {
 
 
                 <div className="mb-3">
-                    <select name={"Years..."} className="form-select" id="inputGroupSelect03" onChange={(event) => {
+                    <select name={"year"} className="form-select" id="inputGroupSelect03" onChange={(event) => {
                         selectHandler({event, formVal, setVal})
                     }}>
-                        <CheckList array={years} selected={formVal.year}/>
+                        <CheckList array={formVal.years} selected={formVal.year}/>
                     </select>
                 </div>
                 <div className="mb-3">
