@@ -1,7 +1,7 @@
 import {URL} from '../../config'
 import axios from "axios";
 import updateState from '../helpers/updateState'
-export function submitHandler({event,formVal,path,history,setVal}){
+export function submitHandler({event,formVal,path,history,setVal,callback}){
     // let bodyFormData = new FormData();
     // for(let key in formVal){
     //     bodyFormData.append(key.toString(),formVal[key])
@@ -17,17 +17,7 @@ export function submitHandler({event,formVal,path,history,setVal}){
             "Content-Type": "application/json",},
 
     })
-        .then(function (response) {
-            if(response.data === 'Congratulation')
-            {
-                if(history)
-                    history.push('\login')
-            }
-            else {
-                window.location.reload();
-            }
-
-        })
+        .then(callback)
         .catch(function (error) {
             updateState({oldval:formVal,from:{unfortunate:'Unfortunate'},setState:setVal})
         });
