@@ -1,13 +1,14 @@
 import {changeHandler,submitHandler} from '../helpers/formHandlers'
+import updateState from '../helpers/updateState'
 export function loginHandler({...val}) {
     submitHandler({...val,path:'login',callback:function (response) {
-            if(response.data === 'Congratulation')
+            if(response.data === 'you are logged in')
             {
-                if(history)
-                    val.history.push('\login')
+                window.location.reload();
+
             }
             else {
-                window.location.reload();
+                updateState({oldval:val.formVal,from:{unfortunate:'Unfortunate'},setState:val.setVal})
             }
 
         }

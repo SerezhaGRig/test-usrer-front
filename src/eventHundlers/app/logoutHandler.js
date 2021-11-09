@@ -10,5 +10,6 @@ export default function logoutControl({data,setData}) {
         withCredentials: true
     }).then(function (response) {
         updateState({oldval:data,from:{isLogged:false,data:'Loading'},setState:setData})
+        window.location.reload();
     })
 }

@@ -2,15 +2,17 @@ import axios from "axios";
 import {URL} from "../../config";
 import updateState from '../helpers/updateState'
 
-export  function loadCars({cars,setCars}) {
+export  function loadCars({cars,setCars,pageId}) {
     console.log("response2")
     axios({
         method: "get",
-        url: URL+"cars",
+        url: URL+"carp/"+pageId,
         withCredentials: true
     }).then(function (response) {
-        var newCars = response.data;
-        setCars(newCars)
+        console.log(response.data)
+        var newCars = response.data.rows;
+        let count = parseInt(response.data.count[0].count)
+        setCars({data:newCars,count})
     }).catch(function (error) {
         
     });
