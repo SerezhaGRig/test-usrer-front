@@ -20,7 +20,7 @@ export default function Cars(props) {
     return (
         <div>
             <CarList data={cars.data}/>
-            <div className="container mt-lg-5">
+            <div className="mt-lg-5 container-fluid">
                 <div className="row">
                     {(id>1 && (cars.count-(id-1)*5)>0) ? <Link to={'/cars/'+(id-1)}>previous
                         </Link>:null
