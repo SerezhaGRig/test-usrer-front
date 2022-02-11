@@ -60,7 +60,7 @@ export default function App() {
                                 }
 
                                 {datajs.isLogged ?  <li className="nav-item mx-md-3">
-                                    <Link className="nav-link" to="/cars">Cars List</Link>
+                                    <Link className="nav-link" to="/cars/1">Cars List</Link>
                                 </li>:null
                                 }
                                 {datajs.isLogged ? <li className="nav-item mx-md-3">
@@ -82,7 +82,7 @@ export default function App() {
                     <Route path="/add">
                         <AddCar args = {datajs}/>
                     </Route>
-                    <Route path="/cars">
+                    <Route path="/cars/:pageId">
                         <Cars args = {datajs}/>
                     </Route>
                     <Route path="/edit/:carId">

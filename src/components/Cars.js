@@ -1,23 +1,36 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import {URL} from "../config";
-import {Redirect, useHistory} from "react-router";
+import {Redirect, useHistory,useParams} from "react-router";
 import {
     Link
 } from "react-router-dom";
 import {loadCars,handleCarEdit} from '../eventHundlers/cars/carsHandler'
 
 export default function Cars(props) {
-    
-    let [cars,setCars]=useState([])
+    let {pageId} = useParams();
+    let id = parseInt(pageId)
+    let [cars,setCars]=useState({data:[],count:0})
     useEffect(() => {
-            loadCars({cars,setCars})
+            loadCars({cars,setCars,pageId})
         
-        },[]);
-    if(cars.length === 0)
+        },[pageId]);
+    if(cars.data.length === 0)
         return (<h2 className='mt-lg-5'>About cars</h2>)
     return (
-        <CarList data={cars}/>
+        <div>
+            <CarList data={cars.data}/>
+            <div className="mt-lg-5 container-fluid">
+                <div className="row">
+                    {(id>1 && (cars.count-(id-1)*5)>0) ? <Link to={'/cars/'+(id-1)}>previous
+                        </Link>:null
+                    }
+                    {(id>0 && (cars.count-id*5)>0) ? <Link to={'/cars/'+(id+1)}>next
+                        </Link>:null
+                    }
+                </div>
+            </div>
+        </div>
     )
 }
 
@@ -30,7 +43,7 @@ function CarList(props){
             <th>{car.pr_year}</th>
             <th>{car.reg_num}</th>
             <th>
-                <Link to={'edit/'+car.car_id}>Edit</Link></th>
+                <Link to={'/edit/'+car.car_id}>Edit</Link></th>
         </tr>
     );
     return (
